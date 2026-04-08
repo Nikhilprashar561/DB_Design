@@ -1,0 +1,186 @@
+
+
+Table Doctor {
+  id serial pk
+  firstName varchar(50)
+  lastName varchar(50)
+  email varchar(255)
+  password varchar(255)
+  gender string
+  phoneNo char(15)
+  age int
+  isAvailable boolean
+  isVerified boolean
+
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table DoctorSpeciality {
+  id serial pk
+  speciality varchar(50)
+  doctorId fk
+  study varchar(50)
+  department string
+  experience int
+  description string
+  timing Date
+  status enum
+}
+
+Table Patient {
+  id serial pk
+  firstName varchar(50)
+  lastName varchar(50)
+  email varchar(255)
+  password varchar(255)
+  gender string
+  isAlive boolean
+  phoneNo char(15)
+  age int
+  
+  createdAt timestamp
+}
+Table Consult {
+  id serial pk
+
+  diagnosis string
+  medicne string
+  nextVisit string
+  problem string
+
+  PatientId fk
+  PaymentId fk
+  AppoinmentId fk
+  doctorId fk
+
+  createdAt timestamp
+}
+
+Table Appointment {
+  id serial pk
+
+  AppoinmentDate Date
+  reason string
+  timing Date
+  status enum
+
+  PatientId fk
+  PaymentId fk
+  doctorId fk
+
+  createdAt timestamp
+}
+Table PatientHistory {
+  id serial pk
+  PatientId fk
+  AppoinmentId fk
+  DiagnosticReportId fk
+  CosnsultId fk
+  PatientReportId fk
+
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table DiagnosticReport {
+  id serial pk
+
+  status boolean
+  medicne string
+  problem string
+
+  PatientId fk
+  DiagnosticId fk
+
+  createdAt timestamp
+}
+Table Diagnostic {
+  id serial pk
+
+  testType string
+  testDate Date
+  labName string
+
+  PatientId fk
+  PaymentId fk
+  doctorId fk
+  CosnsultId fk
+
+  createdAt timestamp
+}
+Table Payment {
+  id serial pk
+  type enum
+  method enum
+  transactionId int
+  status enum
+  amount decimal
+  
+  createdAt timestamp
+}
+Table PatientReport {
+     id serial pk
+
+  ReportName string
+  result string
+
+  doctorAdivseId  fk
+  PatientId  fk
+  DiagnosticReportId  fk
+  doctorId  fk
+  CosnsultId  fk
+
+  createdAt timestamp
+}
+
+Table DoctorAdivse {
+  id serial pk
+  deitPlan string
+  precautions string
+  followDate string
+  medicne string
+  instruction string
+
+  doctorId fk
+  PatientId fk
+
+  createdAt timestamp
+}
+
+
+Ref: DoctorSpeciality.doctorId > Doctor.id
+Ref: DoctorAdivse.PatientId > Patient.id
+Ref: DoctorAdivse.doctorId > Doctor.id
+
+Ref: PatientHistory.PatientId > Patient.id
+Ref: Consult.PatientId -  Patient.id
+Ref: Consult.PaymentId - Payment.id
+Ref: Diagnostic.PaymentId - Payment.id
+Ref: Consult.AppoinmentId- Appointment.id
+Ref: Consult.doctorId <  Doctor.id
+
+Ref: Appointment.PatientId - Patient.id
+Ref: Appointment.PaymentId - Payment.id
+Ref: Appointment.doctorId - Doctor.id
+
+Ref: PatientHistory.AppoinmentId < Appointment.id
+
+Ref: PatientHistory.DiagnosticReportId < DiagnosticReport.id
+Ref: PatientHistory.CosnsultId < Consult.id
+Ref: PatientHistory.PatientReportId < PatientReport.id
+
+
+Ref: DiagnosticReport.PatientId >  Patient.id
+Ref: DiagnosticReport.DiagnosticId - Diagnostic.id
+
+Ref: Diagnostic.PatientId > Patient.id
+Ref: Diagnostic.doctorId > Doctor.id
+Ref: Diagnostic.CosnsultId > Consult.id
+
+Ref: PatientReport.doctorId - Doctor.id
+
+Ref: PatientReport.PatientId - Patient.id
+Ref: PatientReport.DiagnosticReportId < DiagnosticReport.id
+Ref: PatientReport.doctorAdivseId < DoctorAdivse.id
+Ref: PatientReport.CosnsultId - Consult.id
